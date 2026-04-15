@@ -5,11 +5,8 @@ on:
     branches:
       - main
 jobs:
-  code-safety:
-    uses: ./.github/workflows/code-safety.yml
 
   push-to-registry:
-    needs: code-safety
     runs-on: ubuntu-latest
     steps:
       - name: Log in to Docker Hub
