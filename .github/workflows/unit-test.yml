@@ -1,0 +1,23 @@
+name: Unit_Testing_Check
+run-name: Testing branch ${{ github.ref_name }}
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  run-tests:
+    name: Execute Pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python y uv
+        uses: ./.github/actions/setup-python-uv
+
+      - name: Ejecutar Pruebas Unitarias
+        run: uv run pytest
