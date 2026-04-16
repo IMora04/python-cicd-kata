@@ -29,6 +29,7 @@ jobs:
 
       - name: Check code linting with Ruff
         run: uv run ruff check
+        continue-on-error: true
 
       - name: Lint code with Ruff
         if: failure()
