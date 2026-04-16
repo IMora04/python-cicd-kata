@@ -1,0 +1,43 @@
+name: Linter
+run-name: Run linter check for ${{ github.ref }} on ${{ github.event_name }} event
+
+on:
+  push:
+    branches:
+      - **
+  pull_request:
+    branches:
+      - **
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Check code linting with Ruff
+        run: uv run ruff check
+
+      - name: Lint code with Ruff
+        if: failure()
+        run: uv run ruff check --fix
+
+      - name: Commit linted changes (if needed)
+        if: failure()
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: lint code with Ruff"
+          commit_options: "--no-verify"
+          file_pattern: "**/*.py"
